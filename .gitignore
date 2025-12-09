@@ -1,0 +1,48 @@
+# Virtual Environment
+medumlion/
+venv/
+env/
+ENV/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Data files
+*.csv
+*.xlsx
+*.xls
+*.json
+*.db
+*.sqlite
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+*.cache
+
+# Temporary files
+*.tmp
+*.bak
