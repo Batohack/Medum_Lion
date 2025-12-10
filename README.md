@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 ---
-<video controls src="video.mp4" title="Title"></video>
+
 
 ## 📋 **Table des matières**
 
@@ -30,6 +30,8 @@
 **Medum Lion** est une application de détection de deepfakes basée sur le deep learning. Elle combine un **backend PyTorch** pour la classification et un **frontend web** intuitif pour permettre aux utilisateurs de vérifier l'authenticité d'images.
 
 L'application utilise un modèle CNN (Convolutional Neural Network) entraîné sur des images réelles et générées par IA, capable de distinguer les deepfakes avec une précision élevée.
+
+<video controls src="video.mp4" title="Title"></video>
 
 ---
 
