@@ -31,7 +31,7 @@
 
 L'application utilise un modèle CNN (Convolutional Neural Network) entraîné sur des images réelles et générées par IA, capable de distinguer les deepfakes avec une précision élevée.
 
-![alt text](image-1.png)
+![alt text](image.png)
 ![alt text](image-1.png)
 ![alt text](image-2.png)
 ---
