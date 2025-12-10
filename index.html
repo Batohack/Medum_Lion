@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedumLion | Deepfake Defender</title>
+    <style>
+        /* Design "Cyberpunk/Security" sombre avec Matrix background */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Canvas pour l'animation Matrix */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .container {
+            border: 1px solid #30363d;
+            padding: 2rem;
+            border-radius: 8px;
+            background-color: #161b22;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Style du nouveau logo */
+        .logo {
+            max-width: 180px;
+            margin-bottom: 15px;
+            /* Petit effet de halo lumineux bleu pour le style cyberpunk */
+            filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.4));
+        }
+
+        h1 {
+            color: #58a6ff;
+            margin-top: 0;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+        }
+
+        .upload-btn {
+            background-color: #238636;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(46, 160, 67, 0.3);
+        }
+
+        .upload-btn:hover {
+            background-color: #2ea043;
+            box-shadow: 0 0 20px rgba(46, 160, 67, 0.6);
+            transform: scale(1.02);
+        }
+
+        .upload-btn:active {
+            transform: scale(0.98);
+        }
+
+        #preview {
+            max-width: 100%;
+            margin-top: 15px;
+            border-radius: 4px;
+            display: none;
+            border: 2px solid #30363d;
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            display: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .safe {
+            background-color: rgba(46, 160, 67, 0.2);
+            border: 1px solid #2ea043;
+            color: #3fb950;
+            box-shadow: 0 0 10px rgba(46, 160, 67, 0.4);
+        }
+
+        .danger {
+            background-color: rgba(218, 54, 51, 0.2);
+            border: 1px solid #f85149;
+            color: #f85149;
+            box-shadow: 0 0 10px rgba(248, 81, 73, 0.4);
+        }
+
+        .loader {
+            display: none;
+            margin-top: 10px;
+            color: #58a6ff;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.6);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas pour l'animation Matrix en arrière-plan -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="container">
+        <img src="logo.png" alt="Logo MedumLion" class="logo">
+        
+        <h1>🛡️ Deepfake Detector</h1>
+        <p>Analysez une image pour détecter une manipulation par IA.</p>
+        
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+            📂 Choisir une image
+        </button>
+
+        <img id="preview" alt="Prévisualisation">
+        
+        <div id="loader" class="loader">Analyse en cours... ⏳</div>
+
+        <div id="result" class="result-box"></div>
+    </div>
+
+    <script>
+        // ============================================
+        // EFFET MATRIX - Animation du background
+        // ============================================
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrixChars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(0);
+
+        function drawMatrix() {
+            // Fond semi-transparent (trail effect)
+            ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Couleur verte classique Matrix
+            ctx.fillStyle = '#00ff00';
+            ctx.font = `${fontSize}px monospace`;
+
+            for (let i = 0; i < drops.length; i++) {
+                // Caractère aléatoire
+                const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+
+                // Position X et Y
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+
+                // Dessiner le caractère
+                ctx.fillText(char, x, y);
+
+                // Réinitialiser si le caractère sort de l'écran
+                if (y > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                } else {
+                    drops[i]++;
+                }
+            }
+        }
+
+        // Animation en boucle
+        function animate() {
+            drawMatrix();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Adapter à la taille de la fenêtre
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // ============================================
+        // LOGIQUE DE L'APP (Deepfake Detector)
+        // ============================================
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const resultDiv = document.getElementById('result');
+        const loader = document.getElementById('loader');
+
+        // Quand on choisit une image
+        fileInput.addEventListener('change', async function() {
+            const file = this.files[0];
+            if (!file) return;
+
+            // 1. Afficher l'image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                resultDiv.style.display = 'none'; // Cacher l'ancien résultat
+            }
+            reader.readAsDataURL(file);
+
+            // 2. Préparer l'envoi
+            const formData = new FormData();
+            formData.append("file", file);
+
+            // Interface
+            loader.style.display = 'block';
+
+            try {
+                // 3. Appel à l'API (Backend Python)
+                // Assurez-vous que votre serveur uvicorn tourne sur ce port
+                const response = await fetch('http://127.0.0.1:8000/predict/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                // 4. Affichage du résultat
+                loader.style.display = 'none';
+                resultDiv.style.display = 'block';
+                
+                if (data.prediction === "FAKE") {
+                    resultDiv.className = "result-box danger";
+                    // Résultat sur une seule ligne
+                    resultDiv.innerHTML = `🚨 DÉTECTION : FAKE (IA) | Confiance : ${data.confidence}`;
+                } else {
+                    resultDiv.className = "result-box safe";
+                    // Résultat sur une seule ligne
+                    resultDiv.innerHTML = `✅ DÉTECTION : REAL (Humain) | Confiance : ${data.confidence}`;
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                loader.style.display = 'none';
+                alert("Erreur de connexion au serveur API. Vérifiez qu'il tourne bien dans le terminal !");
+            }
+        });
+    </script>
+</body>
+</html>

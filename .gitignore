@@ -15,6 +15,9 @@ __pycache__/
 dist/
 build/
 *.egg
+.pytest_cache/
+.coverage
+htmlcov/
 
 # IDE
 .vscode/
@@ -23,17 +26,21 @@ build/
 *.swo
 *~
 .DS_Store
+.env
+.env.local
 
-# Data files
+# Data files & Datasets
 *.csv
 *.xlsx
 *.xls
 *.json
 *.db
 *.sqlite
+dataset/
 
-# Logs
+# Logs & Output
 *.log
+*.out
 
 # OS
 .DS_Store
@@ -42,7 +49,33 @@ Thumbs.db
 # Cache
 .cache/
 *.cache
+__pycache__/
 
 # Temporary files
 *.tmp
 *.bak
+*.swp
+*.swo
+*~
+
+# Model files (optional: uncomment if models are large and stored elsewhere)
+# *.pth
+# *.pt
+# *.pkl
+# *.pickle
+
+# Test outputs
+test_image_*.png
+*.png.bak
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Node modules (if using npm for frontend)
+node_modules/
+npm-debug.log
+
+# Package manager lock files (optional)
+pipfile.lock
+poetry.lock
