@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 ---
-<video controls src="Capture vidéo du 2025-12-10 16-22-09-1.mp4" title="Title"></video>
+<video controls src="video.mp4" title="Title"></video>
 
 ## 📋 **Table des matières**
 
